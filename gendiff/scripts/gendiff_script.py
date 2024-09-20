@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-from gendiff.core_main import generate_diff
+from gendiff.gendiff_main import generate_diff
 def main():
     parser = argparse.ArgumentParser()
     # Positional Arguments
