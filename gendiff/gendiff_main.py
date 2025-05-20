@@ -3,6 +3,10 @@ import json
 from pathlib import Path
 import yaml
 from yaml.loader import SafeLoader
+from structuregenerator import make_structure
+from stylishresult import stylish_formater
+from plainresult import plain_formater
+
 
 
 def make_dict(file, flag):
@@ -14,7 +18,7 @@ def make_dict(file, flag):
     return result
 
 
-def generate_diff(filepath1: str, filepath2: str) -> str:
+def open_file(filepath1: str, filepath2: str) -> str:
     file1 = open(filepath1, 'r')
     dict1 = make_dict(file1, Path(filepath1).suffix)
     file1.close()
@@ -22,81 +26,31 @@ def generate_diff(filepath1: str, filepath2: str) -> str:
     file2 = open(filepath2, 'r')
     dict2 = make_dict(file2, Path(filepath1).suffix)
     file2.close()
-    answer = make_diff(dict1, dict2)
 
-    return answer
+    return dict1, dict2
 
-def diff_recursive(dict1: dict = None, dict2: dict = None, level=0) -> list[str]:
-    if dict1 is None and dict2 is not None:
-        dict1 = dict2
-    elif dict1 is not None and dict2 is None:
-        dict2 = dict1
 
-    lines = []
-    tab = '   '*level
-    total_keys = get_keys(dict1, dict2)
-    print(total_keys)
+def generate_diff(filepath1, filepath2, flag=''):
+    dict1, dict2 = open_file(filepath1, filepath2)
+    structure = make_structure(dict1, dict2)
 
-    for key in total_keys:
-        symbol = None
-        if key in dict1 and key in dict2:
-            symbol = ' '
-            value = dict1[key]
-        elif key in dict1:
-            symbol = '-'
-            value = dict1[key]
-        elif key in dict2:
-            symbol = '+'
-            value = dict2[key]
-
-        key1 = key in dict1 and isinstance(dict1[key], dict)
-        key2 = key in dict2 and isinstance(dict2[key], dict)
-        if key1 or key2:
-            d1 = dict1[key] if key1 else None
-            d2 = dict2[key] if key2 else None
-
-            both_present = key in dict1 and key in dict2
-            if both_present and not key1:
-                lines.append(f'{tab}- {key}: {dict1[key]}')
-                symbol = '+'
-            elif both_present and not key2:
-                symbol = '-'
-
-            lines.append(f'{tab}{symbol} {key}: {{')
-            lines.extend(diff_recursive(d1, d2, level=level + 1))
-            lines.append(tab+'  }')
-
-            if both_present and not key2:
-                lines.append(f'{tab}+ {key}: {dict2[key]}')
-
-        else:
-            if symbol == ' ' and dict1[key] != dict2[key]:
-                lines.append(f'{tab}- {key}: {dict1[key]}')
-                lines.append(f'{tab}+ {key}: {dict2[key]}')
-            else:
-                lines.append(f'{tab}{symbol} {key}: {value}')
+    if flag == 'plain':
+        lines = plain_formater(structure)
+        print_answer(lines, flag)
+    elif flag == 'stylish':
+        lines = stylish_formater(structure)
+        print_answer(lines, flag)
 
     return lines
 
 
-def make_diff(dict1={}, dict2={}):
-    result = diff_recursive(dict1, dict2)
-    return '\n'.join(['{'] + result + ['}'])
+def print_answer(lines, flag):
+    if flag == 'plain':
+        print('\n'.join(lines))
+    elif flag == 'stylish':
+        print('\n'.join(["{"] + lines + ["}"]))
 
+# print('\n'.join(['{'] + lines + ['}']))
 
-def get_keys(dict1, dict2):
-    total_keys_1 = list(dict1.keys())
-    total_keys_2 = list(dict2.keys())
-    result = []
-    counter = 0
-    while len(result) < (len(total_keys_1) + len(total_keys_2)):
-        if counter <= len(total_keys_1) - 1:
-            result.append(total_keys_1[counter])
-        if counter <= len(total_keys_2) - 1:
-            result.append(total_keys_2[counter])
-        counter += 1
-
-    return sorted(list(dict.fromkeys(result)))
-
-
-
+print(generate_diff('/Users/roman/Documents/Projects/python-project-50/tests/fixtures/nested_json1.json',
+              "/Users/roman/Documents/Projects/python-project-50/tests/fixtures/nested_json2.json", flag='stylish'))

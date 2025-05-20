@@ -1,6 +1,7 @@
 from gendiff.gendiff_main import generate_diff
 
 
+
 def test_smoke_json():
     generate_diff('/Users/roman/Documents/Projects/python-project-50/tests/fixtures/flat_json-1.json',
                   '/Users/roman/Documents/Projects/python-project-50/tests/fixtures/flat-json-2.json')
@@ -137,6 +138,55 @@ def test_flat_json_content_added():
         '+ timeout: 20',
         '+ verbose: True',
     ]
+    assert actual == expected
+
+
+def test_nested_json_content():
+    pass
+
+
+def test_nested_yaml_content():
+    pass
+
+
+def test_plain_json_content():
+    actual = generate_diff('/Users/roman/Documents/Projects/python-project-50/tests/fixtures/plain-json1.json',
+                            '/Users/roman/Documents/Projects/python-project-50/tests/fixtures/plain-json2.json', 'plain')
+    expected = \
+        [
+            "Property 'common.follow' was added with value: false",
+            "Property 'common.setting2' was removed",
+            "Property 'common.setting3' was updated. From true to null",
+            "Property 'common.setting4' was added with value: 'blah blah'",
+            "Property 'common.setting5' was added with value: [complex value]",
+            "Property 'common.setting6.doge.wow' was updated. From '' to 'so much'",
+            "Property 'common.setting6.ops' was added with value: 'vops'",
+            "Property 'group1.baz' was updated. From 'bas' to 'bars'",
+            "Property 'group1.nest' was updated. From [complex value] to 'str'",
+            "Property 'group2' was removed",
+            "Property 'group3' was added with value: [complex value]",
+        ]
+    assert actual == expected
+    pass
+
+
+def test_plain_yaml_content():
+    actual = generate_diff('/Users/roman/Documents/Projects/python-project-50/tests/fixtures/plain-json1.json',
+                            '/Users/roman/Documents/Projects/python-project-50/tests/fixtures/plain-json2.json', 'plain')
+    expected = \
+        [
+            "Property 'common.follow' was added with value: false",
+            "Property 'common.setting2' was removed",
+            "Property 'common.setting3' was updated. From true to null",
+            "Property 'common.setting4' was added with value: 'blah blah'",
+            "Property 'common.setting5' was added with value: [complex value]",
+            "Property 'common.setting6.doge.wow' was updated. From '' to 'so much'",
+            "Property 'common.setting6.ops' was added with value: 'vops'",
+            "Property 'group1.baz' was updated. From 'bas' to 'bars'",
+            "Property 'group1.nest' was updated. From [complex value] to 'str'",
+            "Property 'group2' was removed",
+            "Property 'group3' was added with value: [complex value]",
+        ]
     assert actual == expected
 
 
