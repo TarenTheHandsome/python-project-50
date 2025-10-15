@@ -4,3 +4,4 @@ notes.txt
 tests/test_data/fixtures/
 .github/
 dist/
+trash.py

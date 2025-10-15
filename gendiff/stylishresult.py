@@ -1,59 +1,50 @@
-from structuregenerator import KEYS
 
+def make_string(key_status, key, value):
+    if isinstance(value, dict):
+        return f"{key_status} {key}:""{"
+    if isinstance(value, list):
+        return f"{key_status} {key}:""{"
+    else:
+        return f"{key_status} {key}:{value}"
 
-def flatten_gen(nested, isatom=lambda x: not isinstance(x, list)):
-    for item in nested:
-        if isatom(item):
-            yield item
-        else:
-            yield from flatten_gen(item)
-
-
-def return_string(dictionary, tab):
-    if isinstance(dictionary['value'], dict):
-        dictionary['value'] = '{'
-    return f"{tab}{dictionary['mark']} {dictionary['key']}: {dictionary['value']}"
-
-
-def stylish_formater(structure, level=1):
-    #наша главная строка
+def stylish_formater(structure):
+    #результирующий список
     lines = []
 
-    #формируем пробел
-    tab = '..' * level
 
-    #тайми вайми с кейс
-    KEYS['check_counter'] += 1
-    cycle_counter = KEYS['check_counter']
-    all_keys = KEYS[cycle_counter]
+    status = {'changed': ' ' , 'unchanged': ' ', 'removed': '-', 'added': '+'}
 
-    for all_key in all_keys:
+    for line in structure:
+        key = line['key']
+        value = line['value']
+        key_status = line['key_status']
+        value_form = line['value_form']
 
-        for structure_key in structure:
+        if value_form == 'simple':
+            if line['key_status'] == 'changed':
+                lines.append(make_string(status['removed'], key, value['old_value']))
+                lines.append(make_string(status['added'], key, value['new_value']))
+            else:
+                lines.append(make_string(status[key_status], key, value))
 
-            if all_key in structure[structure_key].keys():
-                #value по ключу
-                main_dictionary = structure[structure_key]
+        if value_form == 'nested':
+            if line['key_status'] == 'changed':
+                if isinstance(value, list):
+                    lines.append(stylish_formater(value))
+                elif isinstance(value, dict):
+                    if isinstance(value['old_value'], list):
+                        lines.append(stylish_formater(value['old_value']))
+                    else:
+                        lines.append(make_string(status['removed'], key, value['old_value']))
+                    if isinstance(value['new_value'], list):
+                        lines.append(stylish_formater(value['new_value']))
+                    else:
+                        lines.append(make_string(status['added'], key, value['new_value']))
+            else:
+                 lines.append(stylish_formater(value))
 
-                if structure_key == 'nested':
-                    #value of all_key
-                    child_value = main_dictionary[all_key]
-
-                    if isinstance(child_value['value'], dict):
-                        lines.append(stylish_formater(child_value['value'], level=level * 2))
-                    lines.insert(-1, return_string(child_value, tab))
+        lines.insert(-1, make_string(status[key_status], key, value))
 
 
-                elif structure_key == 'changed':
-                    for key in main_dictionary[all_key]:
-                        little_dict = main_dictionary[all_key]
-                        lines.append(return_string(little_dict[key], tab))
-
-                else:
-                    lines.append(return_string(main_dictionary[all_key], tab))
-
-    lines.append(f"{'..' * (level-2)}{'}'}")
-
-    return list(flatten_gen(lines))
-
+    return lines
 

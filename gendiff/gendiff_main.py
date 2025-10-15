@@ -5,7 +5,7 @@ import yaml
 from yaml.loader import SafeLoader
 from structuregenerator import make_structure
 from stylishresult import stylish_formater
-from plainresult import plain_formater
+# from plainresult import plain_formater
 
 
 
@@ -21,16 +21,18 @@ def make_dict(file, flag):
 def open_file(filepath1: str, filepath2: str) -> str:
     file1 = open(filepath1, 'r')
     dict1 = make_dict(file1, Path(filepath1).suffix)
+    print(dict1)
     file1.close()
 
     file2 = open(filepath2, 'r')
     dict2 = make_dict(file2, Path(filepath1).suffix)
     file2.close()
+    print(dict2)
 
     return dict1, dict2
 
 
-def generate_diff(filepath1, filepath2, flag=''):
+def generate_diff(filepath1, filepath2, flag='stylish'):
     dict1, dict2 = open_file(filepath1, filepath2)
     structure = make_structure(dict1, dict2)
 
@@ -48,12 +50,28 @@ def print_answer(lines, flag):
     if flag == 'plain':
         print('\n'.join(lines))
     elif flag == 'stylish':
-        print('\n'.join(["{"] + lines + ["}"]))
+        print('\n'.join(["{"] + lines))
 
 # print('\n'.join(['{'] + lines + ['}']))
 
 
+#Отсюда идет лишний код
 
 
+# print(generate_diff("../tests/test_data/files/flat_json1.json",
+#                     "../tests/test_data/files/flat_json2.json", flag='plain'))
+#
 # print(generate_diff("../tests/test_data/files/recursive_json1.json",
-#                     "../tests/test_data/files/recursive_json2.json", flag='stylish'))
+#                     "../tests/test_data/files/recursive_json2.json", flag='plain'))
+
+print(open_file("../tests/test_data/files/recursive_json1.json",
+                    "../tests/test_data/files/recursive_json2.json"))
+
+print(open_file("../tests/test_data/files/flat_json1.json",
+                    "../tests/test_data/files/flat_json2.json"))
+
+
+
+
+
+

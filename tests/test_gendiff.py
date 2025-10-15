@@ -9,12 +9,12 @@ def open_file(path):
 
 def test_smoke_json():
     generate_diff('../tests/test_data/files/empty_json.json',
-                  '../tests/test_data/files/empty_json.json', flag='stylish')
+                  '../tests/test_data/files/empty_json.json')
 
 
 def test_smoke_yaml():
     generate_diff('../tests/test_data/files/empty_yaml.yaml',
-                  '../tests/test_data/files/empty_yaml.yaml', flag='stylish')
+                  '../tests/test_data/files/empty_yaml.yaml')
 
 
 def test_flat_json_content_added():
@@ -59,8 +59,8 @@ def test_plain_json():
 
 
 def test_plain_yaml():
-    actual = generate_diff('../tests/test_data/files/recursive_yaml1.json',
-                           '../tests/test_data/files/recursive_yaml2.json', flag='plain')
+    actual = generate_diff('../tests/test_data/files/recursive_yaml1.yaml',
+                           '../tests/test_data/files/recursive_yaml2.yaml', flag='plain')
     expected = open_file("../tests/test_data/expected_result/plain.txt")
 
     assert actual == expected

@@ -9,3 +9,8 @@ Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]
+
+типы изменений:
+добавленный: was added with value: 'value'
+измененный was updated. From true to null
+удаленный  'common.setting2' was removed
