@@ -52,11 +52,12 @@ def build_diff(old={}, new={}):
             value.append(new[key])
 
         workpiece['key_status'] = get_status(value)
+        status_coll = ['added', 'removed',  'unchanged']
 
         if workpiece['key_status'] == 'nested':
             status = get_simple_status(value)
 
-            if status == 'added' or status == 'added' or status == 'unchanged':
+            if status in status_coll:
                 workpiece['children'] = build_diff(value[1], {})
 
             elif status == 'changed':
@@ -68,8 +69,7 @@ def build_diff(old={}, new={}):
             elif status == 'new_nest':
                 workpiece['children'] = {'old_value': value[1], 'new_value': build_diff(value[3], {})}
 
-        elif workpiece['key_status'] == 'added' or workpiece['key_status'] == 'removed' \
-                or workpiece['key_status'] == 'unchanged':
+        elif workpiece['key_status'] in status_coll:
             workpiece['value'] = value[1]
 
         elif workpiece['key_status'] == 'changed':
@@ -79,8 +79,4 @@ def build_diff(old={}, new={}):
         structure.append(workpiece)
 
     return structure
-
-
-
-
 
