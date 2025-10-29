@@ -1,37 +1,6 @@
 import copy
 
 
-def get_nested_status(value):
-    for i in value:
-        if isinstance(i, dict):
-            return True
-    return False
-
-
-def get_simple_status(value):
-    if len(value) == 4:
-        if value[1] == value[3]:
-            return 'unchanged'
-        else:
-            if isinstance(value[1], dict) and not isinstance(value[3], dict):
-                return 'old_nest'
-            elif not isinstance(value[1], dict) and isinstance(value[3], dict):
-                return 'new_nest'
-            return 'changed'
-    else:
-        if 'old' in value:
-            return 'removed'
-        elif 'new' in value:
-            return 'added'
-
-
-def get_status(value):
-    if get_nested_status(value):
-        return 'nested'
-    else:
-        return get_simple_status(value)
-
-
 def build_diff(old={}, new={}):
     structure = []
 
@@ -42,41 +11,57 @@ def build_diff(old={}, new={}):
     for key in all_keys:
         workpiece = copy.deepcopy(workpiece_original)
         workpiece['key'] = key
-        value = []
 
-        if key in old:
-            value.append('old')
-            value.append(old[key])
-        if key in new:
-            value.append('new')
-            value.append(new[key])
+        if key not in old:
+            value = new[key]
 
-        workpiece['key_status'] = get_status(value)
-        status_coll = ['added', 'removed',  'unchanged']
+            if isinstance(value, dict):
+                workpiece['key_status'] = 'nested'
+                workpiece['children'] = build_diff(value, {})
+            else:
+                workpiece['key_status'] = 'added'
+                workpiece['value'] = value
 
-        if workpiece['key_status'] == 'nested':
-            status = get_simple_status(value)
+        if key not in new:
+            value = old[key]
 
-            if status in status_coll:
-                workpiece['children'] = build_diff(value[1], {})
+            if isinstance(value, dict):
+                workpiece['key_status'] = 'nested'
+                workpiece['children'] = build_diff(value, {})
+            else:
+                workpiece['key_status'] = 'removed'
+                workpiece['value'] = value
 
-            elif status == 'changed':
-                workpiece['children'] = build_diff(value[1], value[3])
+        if key in old and key in new:
+            old_value = old[key]
+            new_value = new[key]
 
-            elif status == 'old_nest':
-                workpiece['children'] = {'old_value': build_diff(value[1], {}), 'new_value': value[3]}
+            if old_value == new_value:
+                if isinstance(old_value, dict):
+                    workpiece['key_status'] = 'nested'
+                    workpiece['children'] = build_diff(old_value, {})
+                else:
+                    workpiece['key_status'] = 'unchanged'
+                    workpiece['value'] = old_value
 
-            elif status == 'new_nest':
-                workpiece['children'] = {'old_value': value[1], 'new_value': build_diff(value[3], {})}
+            else:
+                if isinstance(old_value, dict):
+                    workpiece['key_status'] = 'nested'
+                    if isinstance(new_value, dict):
+                        workpiece['children'] = build_diff(old_value, new_value)
 
-        elif workpiece['key_status'] in status_coll:
-            workpiece['value'] = value[1]
+                    else:
+                        workpiece['children'] = {'old_value': build_diff(old_value, {}), 'new_value': new_value}
 
-        elif workpiece['key_status'] == 'changed':
-            workpiece['old_value'] = value[1]
-            workpiece['new_value'] = value[3]
+                elif isinstance(new_value, dict) and not isinstance(old_value, dict):
+                    workpiece['key_status'] = 'nested'
+                    workpiece['children'] = {'old_value': old_value, 'new_value': build_diff(new_value, {})}
+
+                elif not isinstance(old_value, dict) and not isinstance(new_value, dict):
+                    workpiece['key_status'] = 'changed'
+                    workpiece['old_value'] = old_value
+                    workpiece['new_value'] = new_value
 
         structure.append(workpiece)
 
     return structure
-
