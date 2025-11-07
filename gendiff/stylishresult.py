@@ -6,13 +6,13 @@ def flatten_gen(nested, isatom=lambda x: not isinstance(x, list)):
             yield from flatten_gen(item)
 
 
-def jack_the_pipper(data, counter):
+def get_value(data, counter):
     level = '*' * counter
     lines = []
     for key in data:
         value = data[key]
         if isinstance(value, dict):
-            lines.append([f'{level} {key}: {"{"}', jack_the_pipper(value, counter + 1)])
+            lines.append([f'{level} {key}: {"{"}', get_value(value, counter + 1)])
 
         else:
             lines.append(f'{level} {key}: {value}')
@@ -37,13 +37,13 @@ def stylish_formater(structure, counter=1):
         elif key_status == 'changed':
             if isinstance(line['old_value'], dict):
                 lines.append([f"{level} {status['removed']} {key}: {'{'}",
-                              jack_the_pipper(line['old_value'], counter + 1)])
+                              get_value(line['old_value'], counter + 1)])
             else:
                 lines.append(f"{level} {status['removed']} {key}: {line['old_value']}")
 
             if isinstance(line['new_value'], dict):
                 lines.append([f"{level} {status['added']} {key}: {'{'}",
-                              jack_the_pipper(line['new_value'], counter + 1)])
+                              get_value(line['new_value'], counter + 1)])
             else:
                 lines.append(f"{level} {status['added']} {key}: {line['new_value']}")
 
@@ -51,7 +51,7 @@ def stylish_formater(structure, counter=1):
         elif key_status in ['unchanged', 'removed', 'added']:
             if isinstance(line['value'], dict):
                 lines.append([f"{level} {status[key_status]} {key}: {'{'}",
-                              jack_the_pipper(line['value'], counter + 1)])
+                              get_value(line['value'], counter + 1)])
             else:
                 lines.append(f"{level} {status[key_status]} {key}: {line['value']}")
 
