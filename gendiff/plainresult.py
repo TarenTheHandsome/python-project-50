@@ -1,74 +1,47 @@
+def stringify(value):
 
-def flatten_gen(nested, isatom=lambda x: not isinstance(x, list)):
-    for item in nested:
-        if isatom(item):
-            yield item
-        else:
-            yield from flatten_gen(item)
+    if isinstance(value, dict):
+        return '[сomplex value]'
 
-def find_key(structure):
+    if value is None:
+        return 'null'
 
-    keys = []
-    if isinstance(structure['value'], list) and 'old_value' in structure['value']:
-        keys.append([])
-    elif isinstance(structure['value'], dict):
-        keys.append(find_key(structure['value']))
+    if isinstance(value, bool):
+        return str(value).lower()
 
-    keys.insert(-1, structure['key'])
-    return list(flatten_gen(keys))
-
-def find_value(structure):
-    #переименовать переменную
-    value_collecter = []
-    if isinstance(structure, dict):
-        if not isinstance(structure['value'], dict):
-            value_collecter.append(structure['value'])
-        # elif isinstance(structure['value'], list):
-        #     value_collecter.append([structure['value']['old_value'], structure['value']['new_value']])
-
-        else:
-            value_collecter.append(find_value(structure['value']))
-
-    return list(flatten_gen(value_collecter))
-
-def plain_formater(structure):
-    answer = []
-    print(answer)
-    for line in structure:
-        keys = find_key(line)
-        value = find_value(line)
-        if line['key_status'] == 'removed':
-            answer.append(f"'{'.'.join(keys)}' was removed")
-        elif line['key_status'] == 'added':
-            answer.append(f"'{'.'.join(keys)}' was added with value:'{''.join(value)}'")
-        elif line['key_status'] == 'changed':
-            answer.append(f"'{'.'.join(keys)}' was updated. From value: '{value[0]}' to '{value[1]}'")
-        elif line['key_status'] == 'unchanged':
-            answer.append(f"'{'.'.join(keys)}' was unchanged with value: '{''.join(value)}'")
-
-    return answer
-
-def recursive_stuff(structure, index=0):
-    answer = []
-
-    for line in structure:
-        if isinstance(line, dict):
-
-            if isinstance(line['value'], list):
-                answer.append(recursive_stuff(line['value'], index + 1))
-                answer.insert(-1, {line['key']: f'index {index}'})
-            else:
-                answer.append({line['key']: line['value']})
-
-    return answer
+    return f"'{value}'"
 
 
+def format_plain(diff, nes_key='') -> str:
+    lines = []
+
+    for node in diff:
+        key = node['key']
+        status = node['key_status']
+        value = node.get('value')
 
 
+        if status == 'nested':
+            children = node.get('children')
+            lines.append(format_plain(children, nes_key+f'.{key}'))
+
+        if status == 'added':
+            lines.append(f"Property '{nes_key}.{key}' was added with value: {stringify(value)}")
+
+        if status == 'removed':
+            lines.append(f"Property '{nes_key}.{key}' was removed")
+
+        if status == 'changed':
+            old_value = node.get('old_value')
+            new_value = node.get('new_value')
+            lines.append(f"Property '{nes_key}.{key}' was updated."
+                          f" From {stringify(old_value)} to {stringify(new_value)}")
 
 
+    return '\n'.join(lines)
 
+flat = [{'key': 'follow', 'key_status': 'removed', 'value': False}, {'key': 'host', 'key_status': 'unchanged', 'value': 'hexlet.io'}, {'key': 'proxy', 'key_status': 'removed', 'value': '123.234.53.22'}, {'key': 'timeout', 'key_status': 'changed', 'old_value': 50, 'new_value': 20}, {'key': 'verbose', 'key_status': 'added', 'value': True}]
+nested = [{'key': 'common', 'key_status': 'nested', 'children': [{'key': 'follow', 'key_status': 'added', 'value': False}, {'key': 'setting1', 'key_status': 'unchanged', 'value': 'Value 1'}, {'key': 'setting2', 'key_status': 'removed', 'value': 200}, {'key': 'setting3', 'key_status': 'changed', 'old_value': True, 'new_value': None}, {'key': 'setting4', 'key_status': 'added', 'value': 'blah blah'}, {'key': 'setting5', 'key_status': 'added', 'value': {'key5': 'value5'}}, {'key': 'setting6', 'key_status': 'nested', 'children': [{'key': 'doge', 'key_status': 'nested', 'children': [{'key': 'wow', 'key_status': 'changed', 'old_value': 'value', 'new_value': 'so much'}]}, {'key': 'key', 'key_status': 'unchanged', 'value': 'value'}, {'key': 'ops', 'key_status': 'added', 'value': 'vops'}]}]}, {'key': 'group1', 'key_status': 'nested', 'children': [{'key': 'baz', 'key_status': 'changed', 'old_value': 'bas', 'new_value': 'bars'}, {'key': 'foo', 'key_status': 'unchanged', 'value': 'bar'}, {'key': 'nest', 'key_status': 'changed', 'old_value': {'key': 'value'}, 'new_value': 'str'}]}, {'key': 'group2', 'key_status': 'removed', 'value': {'abc': 12345, 'deep': {'id': 45}}}, {'key': 'group3', 'key_status': 'added', 'value': {'deep': {'id': {'number': 45}}, 'fee': 100500}}]
 
-
-
-
+print(format_plain(flat))
+print(format_plain(nested))
