@@ -1,5 +1,3 @@
-import copy
-
 
 def build_diff(old={}, new={}):
     structure = []

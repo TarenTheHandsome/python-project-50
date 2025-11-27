@@ -1,0 +1,7 @@
+import json
+
+def json_format(structure):
+    return json.dumps(structure, separators=(',', ':'), indent=4)
+
+nested = [{'key': 'common', 'key_status': 'nested', 'children': [{'key': 'follow', 'key_status': 'added', 'value': False}, {'key': 'setting1', 'key_status': 'unchanged', 'value': 'Value 1'}, {'key': 'setting2', 'key_status': 'removed', 'value': 200}, {'key': 'setting3', 'key_status': 'changed', 'old_value': True, 'new_value': None}, {'key': 'setting4', 'key_status': 'added', 'value': 'blah blah'}, {'key': 'setting5', 'key_status': 'added', 'value': {'key5': 'value5'}}, {'key': 'setting6', 'key_status': 'nested', 'children': [{'key': 'doge', 'key_status': 'nested', 'children': [{'key': 'wow', 'key_status': 'changed', 'old_value': 'value', 'new_value': 'so much'}]}, {'key': 'key', 'key_status': 'unchanged', 'value': 'value'}, {'key': 'ops', 'key_status': 'added', 'value': 'vops'}]}]}, {'key': 'group1', 'key_status': 'nested', 'children': [{'key': 'baz', 'key_status': 'changed', 'old_value': 'bas', 'new_value': 'bars'}, {'key': 'foo', 'key_status': 'unchanged', 'value': 'bar'}, {'key': 'nest', 'key_status': 'changed', 'old_value': {'key': 'value'}, 'new_value': 'str'}]}, {'key': 'group2', 'key_status': 'removed', 'value': {'abc': 12345, 'deep': {'id': 45}}}, {'key': 'group3', 'key_status': 'added', 'value': {'deep': {'id': {'number': 45}}, 'fee': 100500}}]
+print(json_format(nested))
