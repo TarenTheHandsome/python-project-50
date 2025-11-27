@@ -36,12 +36,10 @@ def format_stylish(diff, depth=0) -> str:
         status = node['key_status']
         base_indent = ' ' * (depth * INDENT_SIZE)
         key_indent = base_indent + ' ' * 2
-        # indent = ' ' * (INDENT_SIZE + depth * 2)
         current_indent = f"{key_indent}"
 
         if status == 'nested':
             child = format_stylish(node['children'], depth + 1)
-            # lines.append(f"{key_indent[:-2]}  {key}: {child}")
             lines.append(f"{key_indent}  {key}: {child}")
             continue
 
