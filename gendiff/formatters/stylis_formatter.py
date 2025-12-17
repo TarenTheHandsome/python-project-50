@@ -56,5 +56,5 @@ def format_stylish(diff, depth=0) -> str:
 
     closing_indent = ' ' * (depth * INDENT_SIZE)
     lines.append(f"{closing_indent}}}")
-    return '\n'.join(lines)
 
+    return '\n'.join(lines)

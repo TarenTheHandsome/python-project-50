@@ -1,22 +1,21 @@
-import itertools
 import json
 from pathlib import Path
 import yaml
 from yaml.loader import SafeLoader
 from structuregenerator import build_diff
-from stylishresult import format_stylish
-from plainresult import format_plain
-from json_formatter import json_format
+from gendiff.formatters.stylis_formatter import format_stylish
+from gendiff.formatters.plain_formatter import format_plain
+from gendiff.formatters.json_formatter import json_format
 
+#разобраться с названиями функций
 
-
-def make_dict(file, flag):
+def make_dict(file, flag) -> dict:
     if flag == '.json':
-        result = json.load(file)
-    elif flag == '.yaml':
-        result = yaml.load(file, Loader=SafeLoader)
+        dictionary = json.load(file)
+    elif flag == '.yaml' or flag == '.yml':
+        dictionary = yaml.load(file, Loader=SafeLoader)
 
-    return result
+    return dictionary
 
 
 def open_file(filepath1: str, filepath2: str) -> str:
@@ -37,14 +36,14 @@ def generate_diff(filepath1, filepath2, flag='stylish'):
 
     if flag == 'plain':
         lines = format_plain(structure)
-        print(lines)
+
     if flag == 'stylish':
         lines = format_stylish(structure)
-        print(lines)
+
     if flag == 'json':
         lines = json_format(structure)
-        print(lines)
 
 
-generate_diff("../tests/test_data/files/recursive_json1.json", "../tests/test_data/files/recursive_json2.json", 'json')
+    return lines
+
 

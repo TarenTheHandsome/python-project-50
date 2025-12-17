@@ -1,7 +1,6 @@
-notes.txt
+
 .venv/
 .pytest_cache/
 tests/test_data/fixtures/
 .github/
 dist/
-trash.py
