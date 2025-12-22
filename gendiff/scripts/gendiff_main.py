@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import yaml
 from yaml.loader import SafeLoader
-from structuregenerator import build_diff
+from gendiff.scripts.structuregenerator import build_diff
 from gendiff.formatters.stylis_formatter import format_stylish
 from gendiff.formatters.plain_formatter import format_plain
 from gendiff.formatters.json_formatter import json_format
