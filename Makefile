@@ -1,15 +1,31 @@
 # Makefile
 install:
-	poetry install
+    uv sync
 
-build:
-	poetry build
+run:
+    uv run gendiff
 
-publish:
-	poetry publish --dry-run
+test:
+    uv run pytest
 
-package-install:
-	python3 -m pip install --user dist/*.whl
+test-coverage:
+    uv run pytest --cov=gendiff --cov-report=xml:coverage.xml
 
 lint:
-	poetry run flake8 gendiff
+    uv run ruff check gendiff
+
+check: test lint
+
+build:
+    uv build
+
+package-install:
+    uv tool install dist/*.whl
+
+reinstall:
+    uv tool install --force dist/*.whl
+
+uninstall:
+    uv tool uninstall hexlet-code
+
+.PHONY: install test lint selfcheck check build package-install reinstall uninstall
