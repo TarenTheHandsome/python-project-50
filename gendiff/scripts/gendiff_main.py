@@ -47,3 +47,5 @@ def generate_diff(filepath1, filepath2, flag='stylish'):
     return lines
 
 
+print(generate_diff('../tests/test_data/files/recursive_yaml1.yaml',
+                           '../tests/test_data/files/recursive_yaml2.yaml', 'plain'))
