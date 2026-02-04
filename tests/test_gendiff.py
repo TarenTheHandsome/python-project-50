@@ -1,4 +1,4 @@
-from gendiff.scripts.gendiff_main import generate_diff
+from gendiff.scripts.gendiff import generate_diff
 
 def open_file(path):
     file = open(path, "r")

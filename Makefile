@@ -16,6 +16,9 @@ lint:
 
 check: test lint
 
+install:
+	uv sync
+
 build:
     uv build
 
