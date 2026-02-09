@@ -1,10 +1,5 @@
 from gendiff.scripts.gendiff import generate_diff
-
-def open_file(path):
-    file = open(path, "r")
-    content = file.read()
-    file.close()
-    return content
+from gendiff.scripts.gendiff import open_file
 
 
 def test_smoke_json():

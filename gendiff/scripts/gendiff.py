@@ -11,27 +11,28 @@ from gendiff.formatters.json_formatter import json_format
 
 def make_dict(file, flag) -> dict:
     if flag == '.json':
-        dictionary = json.load(file)
+        dictionary = json.loads(file)
     elif flag == '.yaml' or flag == '.yml':
         dictionary = yaml.load(file, Loader=SafeLoader)
 
     return dictionary
 
 
-def open_file(filepath1: str, filepath2: str) -> str:
-    file1 = open(filepath1, 'r')
-    dict1 = make_dict(file1, Path(filepath1).suffix)
-    file1.close()
+def open_file(file_path: str) -> str:
+    with open(file_path, encoding='utf-8') as file:
+        return file.read()
 
-    file2 = open(filepath2, 'r')
-    dict2 = make_dict(file2, Path(filepath1).suffix)
-    file2.close()
 
-    return dict1, dict2
+def make_dicts(*file_paths: str) -> dict:
+    dicts = []
+    for file_path in file_paths:
+        dicts.append(make_dict(open_file(file_path), Path(file_path).suffix))
+
+    return dicts
 
 
 def generate_diff(filepath1, filepath2, flag='stylish'):
-    dict1, dict2 = open_file(filepath1, filepath2)
+    dict1, dict2 = make_dicts(filepath1, filepath2)
     structure = build_diff(dict1, dict2)
 
     if flag == 'plain':
@@ -46,6 +47,3 @@ def generate_diff(filepath1, filepath2, flag='stylish'):
 
     return lines
 
-
-print(generate_diff('../tests/test_data/files/recursive_yaml1.yaml',
-                           '../tests/test_data/files/recursive_yaml2.yaml', 'plain'))
