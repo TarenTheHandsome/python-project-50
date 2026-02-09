@@ -3,6 +3,7 @@
 .pytest_cache/
 tests/test_data/fixtures/
 .github/
+.idea/
 dist/
 .__pycache__/
 *.pyc

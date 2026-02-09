@@ -1,5 +1,5 @@
-from gendiff.scripts.gendiff import generate_diff
-from gendiff.scripts.gendiff import open_file
+from gendiff.scripts.gendiff_main import generate_diff
+from gendiff.scripts.gendiff_main import open_file
 
 
 def test_smoke_json():
