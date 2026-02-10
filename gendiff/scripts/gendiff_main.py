@@ -7,7 +7,6 @@ from gendiff.formatters.stylis_formatter import format_stylish
 from gendiff.formatters.plain_formatter import format_plain
 from gendiff.formatters.json_formatter import json_format
 
-#разобраться с названиями функций
 
 def make_dict(file, flag) -> dict:
     if flag == '.json':
@@ -44,6 +43,4 @@ def generate_diff(filepath1, filepath2, flag='stylish'):
     if flag == 'json':
         lines = json_format(structure)
 
-
     return lines
-
