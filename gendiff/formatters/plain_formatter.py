@@ -28,7 +28,6 @@ def format_plain(diff, nes_key='') -> str:
         value = node.get('value')
         child_path = build_path(nes_key, key)
 
-
         if status == 'nested':
             children = node.get('children')
             lines.append(format_plain(children, child_path))
@@ -45,6 +44,4 @@ def format_plain(diff, nes_key='') -> str:
             lines.append(f"Property '{child_path}' was updated."
                           f" From {stringify(old_value)} to {stringify(new_value)}")
 
-
     return '\n'.join(lines)
-

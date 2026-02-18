@@ -1,4 +1,3 @@
-
 def build_diff(old={}, new={}):
     structure = []
 
@@ -6,7 +5,6 @@ def build_diff(old={}, new={}):
 
     for key in all_keys:
         workpiece = {'key': key}
-
 
         if key not in old:
             workpiece['key_status'] = 'added'
@@ -33,8 +31,6 @@ def build_diff(old={}, new={}):
                 workpiece['old_value'] = old_value
                 workpiece['new_value'] = new_value
 
-
         structure.append(workpiece)
 
     return structure
-
