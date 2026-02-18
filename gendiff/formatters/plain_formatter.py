@@ -43,7 +43,7 @@ def format_plain(diff, nes_key='') -> str:
             old_value = node.get('old_value')
             new_value = node.get('new_value')
             lines.append(f"Property '{child_path}' was updated."
-                          f" From {stringify(old_value)} "
+                         f" From {stringify(old_value)} "
                          f"to {stringify(new_value)}")
 
     return '\n'.join(lines)
