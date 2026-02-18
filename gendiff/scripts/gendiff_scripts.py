@@ -13,7 +13,8 @@ def parser_func():
     parser.add_argument('second_file', type=str)
 
     # Optional Arguments
-    parser.add_argument('-f', '--format', help='set format of output', default='stylish', type=str)
+    parser.add_argument('-f', '--format', help='set format of output',
+                        default='stylish', type=str)
     args = parser.parse_args()
 
     return args

@@ -33,7 +33,8 @@ def format_plain(diff, nes_key='') -> str:
             lines.append(format_plain(children, child_path))
 
         if status == 'added':
-            lines.append(f"Property '{child_path}' was added with value: {stringify(value)}")
+            lines.append(f"Property '{child_path}'"
+                         f" was added with value: {stringify(value)}")
 
         if status == 'removed':
             lines.append(f"Property '{child_path}' was removed")
@@ -42,6 +43,7 @@ def format_plain(diff, nes_key='') -> str:
             old_value = node.get('old_value')
             new_value = node.get('new_value')
             lines.append(f"Property '{child_path}' was updated."
-                          f" From {stringify(old_value)} to {stringify(new_value)}")
+                          f" From {stringify(old_value)} "
+                         f"to {stringify(new_value)}")
 
     return '\n'.join(lines)

@@ -1,10 +1,7 @@
 import os
-
-import pytest
-
 from gendiff import generate_diff
 
-# Пути относительно файла теста — работают при любом текущем каталоге (локально и в CI)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FILES_DIR = os.path.join(BASE_DIR, 'test_data', 'files')
 EXPECTED_DIR = os.path.join(BASE_DIR, 'test_data', 'expected_result')
