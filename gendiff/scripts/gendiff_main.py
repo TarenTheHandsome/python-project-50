@@ -30,17 +30,13 @@ def make_dicts(*file_paths: str) -> dict:
     return dicts
 
 
-def generate_diff(filepath1, filepath2, flag='stylish'):
+def generate_diff(filepath1, filepath2, formatter='stylish'):
     dict1, dict2 = make_dicts(filepath1, filepath2)
     structure = build_diff(dict1, dict2)
 
-    if flag == 'plain':
-        lines = format_plain(structure)
+    if formatter == 'plain':
+        return format_plain(structure)
+    if formatter == 'json':
+        return json_format(structure)
 
-    if flag == 'stylish':
-        lines = format_stylish(structure)
-
-    if flag == 'json':
-        lines = json_format(structure)
-
-    return lines
+    return format_stylish(structure)

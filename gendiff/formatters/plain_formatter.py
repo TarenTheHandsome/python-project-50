@@ -1,6 +1,6 @@
 def stringify(value):
-
-    if isinstance(value, dict):
+    """Format value for plain output. Only strings are quoted."""
+    if isinstance(value, dict) or isinstance(value, list):
         return '[complex value]'
 
     if value is None:
@@ -9,7 +9,10 @@ def stringify(value):
     if isinstance(value, bool):
         return str(value).lower()
 
-    return f"'{value}'"
+    if isinstance(value, str):
+        return f"'{value}'"
+
+    return str(value)
 
 
 def build_path(parent, key):
