@@ -8,8 +8,6 @@ FILES_DIR = os.path.join(BASE_DIR, 'test_data', 'files')
 EXPECTED_DIR = os.path.join(BASE_DIR, 'test_data', 'expected_result')
 
 
-
-
 def test_smoke_json():
     generate_diff(
         os.path.join(FILES_DIR, 'empty_json.json'),
