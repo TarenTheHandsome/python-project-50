@@ -1,4 +1,5 @@
 import os
+import pytest
 from gendiff import generate_diff
 from gendiff.scripts.gendiff_main import open_file
 
