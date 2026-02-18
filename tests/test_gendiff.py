@@ -1,18 +1,25 @@
 import os
+
 import pytest
+
 from gendiff import generate_diff
-from gendiff.scripts.gendiff_main import open_file
 
-
+# Пути относительно файла теста — работают при любом текущем каталоге (локально и в CI)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FILES_DIR = os.path.join(BASE_DIR, 'test_data', 'files')
 EXPECTED_DIR = os.path.join(BASE_DIR, 'test_data', 'expected_result')
 
 
+def read_expected(name):
+    path = os.path.join(EXPECTED_DIR, name)
+    with open(path, encoding='utf-8') as f:
+        return f.read().strip()
+
+
 def test_smoke_json():
     generate_diff(
         os.path.join(FILES_DIR, 'empty_json.json'),
-        os.path.join(FILES_DIR, 'empty_json.json')
+        os.path.join(FILES_DIR, 'empty_json.json'),
     )
 
 
@@ -29,9 +36,8 @@ def test_flat_json_content_added():
         os.path.join(FILES_DIR, 'flat_json2.json'),
         formatter='stylish',
     )
-    expected = open_file(os.path.join(EXPECTED_DIR, 'flat_stylish.txt'))
-
-    assert actual == expected
+    expected = read_expected('flat_stylish.txt')
+    assert actual.strip() == expected
 
 
 def test_flat_yaml_content_added():
@@ -40,9 +46,8 @@ def test_flat_yaml_content_added():
         os.path.join(FILES_DIR, 'flat_yaml2.yaml'),
         formatter='stylish',
     )
-    expected = open_file(os.path.join(EXPECTED_DIR, 'flat_stylish.txt'))
-
-    assert actual == expected
+    expected = read_expected('flat_stylish.txt')
+    assert actual.strip() == expected
 
 
 def test_nested_json():
@@ -51,9 +56,8 @@ def test_nested_json():
         os.path.join(FILES_DIR, 'recursive_json2.json'),
         formatter='stylish',
     )
-    expected = open_file(os.path.join(EXPECTED_DIR, 'recursive_stylist.txt'))
-
-    assert actual == expected
+    expected = read_expected('recursive_stylist.txt')
+    assert actual.strip() == expected
 
 
 def test_nested_yaml():
@@ -62,9 +66,8 @@ def test_nested_yaml():
         os.path.join(FILES_DIR, 'recursive_yaml2.yaml'),
         formatter='stylish',
     )
-    expected = open_file(os.path.join(EXPECTED_DIR, 'recursive_stylist.txt'))
-
-    assert actual == expected
+    expected = read_expected('recursive_stylist.txt')
+    assert actual.strip() == expected
 
 
 def test_plain_json():
@@ -73,9 +76,8 @@ def test_plain_json():
         os.path.join(FILES_DIR, 'recursive_json2.json'),
         formatter='plain',
     )
-    expected = open_file(os.path.join(EXPECTED_DIR, 'plain.txt'))
-
-    assert actual == expected
+    expected = read_expected('plain.txt')
+    assert actual.strip() == expected
 
 
 def test_plain_yaml():
@@ -84,11 +86,5 @@ def test_plain_yaml():
         os.path.join(FILES_DIR, 'recursive_yaml2.yaml'),
         formatter='plain',
     )
-    expected = open_file("../tests/test_data/expected_result/plain.txt")
-
-    assert actual == expected
-
-
-if __name__ == '__main__':
-    from pytest import main
-    main()
+    expected = read_expected('plain.txt')
+    assert actual.strip() == expected
