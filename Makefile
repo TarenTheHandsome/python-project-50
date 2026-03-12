@@ -1,4 +1,3 @@
-# Makefile
 install:
     uv sync
 
