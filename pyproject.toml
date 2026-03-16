@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "pytest>=9.0.2",
+    "pytest-cov>=9.0.2",
     "pyyaml>=6.0.3",
 ]
 
