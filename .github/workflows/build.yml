@@ -30,8 +30,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=TarenTheHandsome-project-50
-            -Dsonar.organization=TarenTheHandsome
+            -Dsonar.projectKey=TarenTheHandsome_python-project-50
+            -Dsonar.organization=tarenthehandsome
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.coverage.exclusions=tests/**
             -Dsonar.exclusions=tests/**
