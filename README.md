@@ -14,4 +14,56 @@
 
 ### Installation:
 
-``` cd python-project-50 ```
+``` bash
+git clone git@github.com:TarenTheHandsome/python-project-50.git 
+```
+
+``` bash
+cd python-project-50 
+```
+
+``` bash
+uv build
+```
+
+``` bash
+uv tool install dist/*.whl 
+```
+
+### Supported File Formats:
+- JSON (.json)
+- YAML (.yaml, .yml)
+### Usage:
+
+1. Place the files you want to compare inside the tests/test_data directory.
+2. Run the following command, replacing file1 and file2 with your actual file names:
+``` bash
+uv run gendiff tests/test_data/<file1> tests/test_data/<file2>
+```
+3. By default, the output is formatted using the stylish formatter. 
+- To use a different format (json or plain), specify it with the -f flag:
+
+### Пример вывода инструмента при использовании разных форматтеров:
+- Default (stylish) formatter:
+``` bash
+uv run gendiff tests/test_data/<file1> tests/test_data/<file1>
+```
+- Using the JSON formatter:
+``` bash
+uv run gendiff -f stylish tests/test_data/<file1> tests/test_data/<file1>
+```
+- Using the Plain formatter:
+``` bash
+uv run gendiff -f plain tests/test_data/<file1> tests/test_data/<file1>
+```
+
+### Development and Testing:
+#### Linting
+Run ruff to check for linting issues:
+``` bash
+make lint
+```
+Running Tests
+``` bash
+make test-coverage
+```
