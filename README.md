@@ -67,3 +67,13 @@ Running Tests
 ``` bash
 make test-coverage
 ```
+### Example
+
+#### without a flag (json): 
+[![asciicast](https://asciinema.org/a/ll6XNoiehKakff3a)](https://asciinema.org/a/ll6XNoiehKakff3a)
+
+#### with flag plain (json): 
+[![asciicast](https://asciinema.org/a/knPi7WhRG9Iqb4vP)](https://asciinema.org/a/knPi7WhRG9Iqb4vP)
+
+#### with flag stylish (yaml): 
+[![asciicast](https://asciinema.org/a/nOG77qWkHWyaZzi3)](https://asciinema.org/a/nOG77qWkHWyaZzi3)
